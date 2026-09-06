@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CGDI · My Filings</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header class="topbar">
+    <div>
+        <strong>CGDI Human Coding</strong>
+        <span class="muted" th:text="${username}"></span>
+    </div>
+    <div>
+        <a th:if="${canAssign}" href="/assignments">Assignments</a>
+        <a th:if="${canAssign}" href="/review/paragraphs">Compare labels</a>
+        <a href="/logout">Logout</a>
+    </div>
+</header>
+
+<main class="page wide-page">
+    <div class="page-title">
+        <h1>My filings</h1>
+        <p>Open a filing, then work through its NEW, MODIFIED, and SUBMITTED paragraphs.</p>
+    </div>
+
+    <div class="toolbar-row">
+        <input id="filingSearch" class="search-input" type="search"
+               placeholder="Search company, CIK, filename…">
+        <span id="filingSummary" class="muted"></span>
+    </div>
+
+    <div class="table-wrap">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>Company</th>
+                <th>FY</th>
+                <th>NEW</th>
+                <th>MODIFIED</th>
+                <th>SUBMITTED</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="filingRows"></tbody>
+        </table>
+    </div>
+</main>
+
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+<script th:src="@{/js/filings.js}"></script>
+</body>
+</html>

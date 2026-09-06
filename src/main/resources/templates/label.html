@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="filing_id" th:content="${filingId}">
+    <title>CGDI · Label Filing</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header class="topbar">
+    <div>
+        <a href="/label" class="back-link">← My filings</a>
+        <strong>CGDI Human Coding</strong>
+        <span class="muted" th:text="${username}"></span>
+    </div>
+    <div>
+        <a th:if="${canAssign}" href="/assignments">Assignments</a>
+        <a th:if="${canAssign}" href="/review/paragraphs">Compare labels</a>
+        <a href="/logout">Logout</a>
+    </div>
+</header>
+
+<main class="workspace">
+    <section class="workspace-head">
+        <div>
+            <h1 id="company">Loading…</h1>
+            <div id="filingMeta" class="muted"></div>
+        </div>
+        <div id="filingCounts" class="count-strip"></div>
+    </section>
+
+    <nav class="status-tabs" aria-label="Paragraph status">
+        <button type="button" class="status-tab active" data-status="NEW">NEW <span id="newCount">0</span></button>
+        <button type="button" class="status-tab" data-status="MODIFIED">MODIFIED <span id="modifiedCount">0</span></button>
+        <button type="button" class="status-tab" data-status="SUBMITTED">SUBMITTED <span id="submittedCount">0</span></button>
+    </nav>
+
+    <div class="coding-layout">
+        <aside class="paragraph-list-pane">
+            <div id="paragraphList" class="paragraph-list"></div>
+        </aside>
+
+        <section class="coding-pane">
+            <div id="emptyCoding" class="empty-coding">Select a paragraph from the left.</div>
+
+            <div id="codingForm" class="hidden">
+                <div class="paragraph-card">
+                    <div class="paragraph-head">
+                        <div>
+                            <strong id="paragraphId"></strong>
+                            <span id="paragraphStatus" class="status-pill"></span>
+                        </div>
+                        <span id="sectionHint"></span>
+                    </div>
+                    <div id="paragraphText" class="paragraph-text"></div>
+                </div>
+
+                <div class="coding-section gate-decision-section">
+                    <div class="section-title-row">
+                        <div>
+                            <h2>1. Eligibility decision</h2>
+                            <p class="help">Apply the three gates sequentially. Choose one outcome; the first failed gate is recorded.</p>
+                        </div>
+                        <button id="clearGateDecisionBtn" type="button" class="small-button hidden">Clear decision</button>
+                    </div>
+
+                    <div class="gate-decision-grid">
+                        <button type="button" class="gate-decision-btn pass" data-decision="PASS">
+                            <strong>✓ Eligible</strong>
+                            <span>Passes all 3 gates</span>
+                            <kbd>1</kbd>
+                        </button>
+                        <button type="button" class="gate-decision-btn" data-decision="FAIL1">
+                            <strong>Exclude · Gate 1</strong>
+                            <span>No cyber nexus</span>
+                            <kbd>2</kbd>
+                        </button>
+                        <button type="button" class="gate-decision-btn" data-decision="FAIL2">
+                            <strong>Exclude · Gate 2</strong>
+                            <span>Not the registrant's practice</span>
+                            <kbd>3</kbd>
+                        </button>
+                        <button type="button" class="gate-decision-btn" data-decision="FAIL3">
+                            <strong>Exclude · Gate 3</strong>
+                            <span>No governance/process evidence</span>
+                            <kbd>4</kbd>
+                        </button>
+                    </div>
+                    <div id="gateDecisionSummary" class="decision-summary muted">No decision yet. If uncertain, Save a draft and add a memo.</div>
+                </div>
+
+                <div id="dimensionSection" class="coding-section hidden">
+                    <h2>2. Supported dimensions and attributes</h2>
+                    <p class="help"><strong>Attributes are the core factual labels.</strong> Select every supported dimension, then inspect every attribute shown for that dimension. At least one attribute is required for each submitted dimension.</p>
+                    <div id="dimensionList"></div>
+                    <div class="ontology-gap">
+                        <label>
+                            <input type="checkbox" id="ontologyGap">
+                            Eligible cyber-governance evidence, but none of the six dimensions fits
+                        </label>
+                        <textarea id="gapNote" rows="2"
+                                  placeholder="Describe the missing concept / possible ontology gap"></textarea>
+                    </div>
+                </div>
+
+                <div class="coding-section memo-section">
+                    <label for="notes"><strong>Labeler memo / comments</strong> <span class="muted">optional</span></label>
+                    <textarea id="notes" rows="3"
+                              placeholder="Uncertainty, rationale, coding issue, context note…"></textarea>
+                </div>
+
+                <div class="sticky-actions">
+                    <span id="dirtyStatus" class="muted"></span>
+                    <span id="saveStatus"></span>
+                    <span class="shortcut-hint">Ctrl/⌘+S Save · Ctrl/⌘+Enter Submit</span>
+                    <button id="saveBtn" type="button">Save</button>
+                    <button id="submitBtn" type="button" class="primary">Submit & Next</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+<script th:src="@{/js/label.js}"></script>
+</body>
+</html>

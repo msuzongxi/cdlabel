@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CGDI · Paragraph Comparison</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header class="topbar">
+    <div>
+        <a href="/assignments" class="back-link">← Assignments</a>
+        <strong>Paragraph comparison</strong>
+        <span class="muted" th:text="${username}"></span>
+    </div>
+    <div>
+        <a href="/review">Filing view</a>
+        <a href="/assignments">Assignments</a>
+        <a href="/logout">Logout</a>
+    </div>
+</header>
+
+<main class="workspace review-workspace">
+    <section class="workspace-head">
+        <div>
+            <h1>Comparison queue</h1>
+            <div class="muted">Review paragraphs across filings by agreement status. Original labeler records remain read-only.</div>
+        </div>
+        <div id="queueCounts" class="count-strip"></div>
+    </section>
+
+    <div class="review-mode-bar">
+        <a class="review-mode active" href="/review/paragraphs">Paragraph view</a>
+        <a class="review-mode" href="/review">Filing view</a>
+    </div>
+
+    <div class="review-pair-bar">
+        <strong>Compare</strong>
+        <label>Labeler A
+            <select id="queueLabelerA"></select>
+        </label>
+        <span class="muted">vs</span>
+        <label>Labeler B
+            <select id="queueLabelerB"></select>
+        </label>
+        <label>Stage
+            <select id="queueStage">
+                <option value="CALIBRATION" selected>Calibration</option>
+                <option value="BLIND_PILOT">Blind pilot</option>
+                <option value="FORMAL_VALIDATION">Formal validation</option>
+                <option value="ALL">All stages</option>
+            </select>
+        </label>
+        <button type="button" id="queueCompareBtn" class="primary">Load comparison</button>
+        <span id="queuePairMessage" class="muted"></span>
+    </div>
+
+    <div class="review-filter-bar queue-filter-bar">
+        <label>Status
+            <select id="queueStatusFilter">
+                <option value="DISAGREEMENT" selected>Disagreements</option>
+                <option value="AGREEMENT">Agreements</option>
+                <option value="INCOMPLETE">Incomplete</option>
+                <option value="ALL">All paragraphs</option>
+            </select>
+        </label>
+        <label>Difference
+            <select id="queueDifferenceFilter">
+                <option value="ALL" selected>Any difference</option>
+                <option value="ELIGIBILITY">Eligibility / gates</option>
+                <option value="ONTOLOGY_GAP">Ontology gap</option>
+                <option value="A1">A1</option>
+                <option value="A2">A2</option>
+                <option value="A3">A3</option>
+                <option value="B1">B1</option>
+                <option value="B2">B2</option>
+                <option value="C1">C1</option>
+                <option value="ATTRIBUTES">Attributes only</option>
+            </select>
+        </label>
+        <input id="queueSearch" class="search-input" type="search" placeholder="Search company, paragraph, text…">
+        <span id="queueVisibleSummary" class="muted"></span>
+    </div>
+
+    <div class="review-layout queue-review-layout">
+        <aside class="review-paragraph-pane">
+            <div id="queueParagraphList" class="review-paragraph-list queue-paragraph-list"></div>
+        </aside>
+        <section class="review-detail-pane">
+            <div id="queueEmpty" class="empty-coding">Loading comparison…</div>
+            <div id="queueDetail" class="hidden"></div>
+        </section>
+    </div>
+</main>
+
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+<script th:src="@{/js/review-paragraphs.js}"></script>
+</body>
+</html>

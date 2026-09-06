@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CGDI · Label Comparison</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header class="topbar">
+    <div>
+        <a href="/assignments" class="back-link">← Assignments</a>
+        <strong>Label comparison</strong>
+        <span class="muted" th:text="${username}"></span>
+    </div>
+    <div>
+        <a href="/review/paragraphs">Paragraph view</a>
+        <a href="/assignments">Assignments</a>
+        <a href="/logout">Logout</a>
+    </div>
+</header>
+
+<main class="page wide-page">
+    <div class="page-title">
+        <h1>Compare labelers</h1>
+        <p>Open a filing to compare submitted paragraph decisions from the assigned labelers. Comparison is read-only; original labeler records are never overwritten.</p>
+    </div>
+
+    <div class="review-mode-bar">
+        <a class="review-mode" href="/review/paragraphs">Paragraph view</a>
+        <a class="review-mode active" href="/review">Filing view</a>
+    </div>
+
+    <div class="toolbar-row">
+        <label>
+            Stage
+            <select id="reviewStageFilter">
+                <option value="CALIBRATION" selected>Calibration</option>
+                <option value="BLIND_PILOT">Blind pilot</option>
+                <option value="FORMAL_VALIDATION">Formal validation</option>
+                <option value="ALL">All</option>
+            </select>
+        </label>
+        <input id="reviewSearch" class="search-input" type="search" placeholder="Search company, CIK, filename…">
+        <span id="reviewSummary" class="muted"></span>
+    </div>
+
+    <div class="table-wrap">
+        <table class="data-table review-table">
+            <thead>
+            <tr>
+                <th>Company</th>
+                <th>Stage</th>
+                <th>FY</th>
+                <th>Labelers</th>
+                <th>Submitted</th>
+                <th>Progress</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="reviewFilingRows"></tbody>
+        </table>
+    </div>
+</main>
+
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+<script th:src="@{/js/review.js}"></script>
+</body>
+</html>

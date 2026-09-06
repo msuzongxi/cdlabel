@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>CGDI · Filing Assignments</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header class="topbar">
+    <div>
+        <a href="/label" class="back-link">← My filings</a>
+        <strong>Filing assignments</strong>
+        <span class="muted" th:text="${username}"></span>
+    </div>
+    <div>
+        <a href="/review/paragraphs">Compare labels</a>
+        <a href="/logout">Logout</a>
+    </div>
+</header>
+
+<main class="page wide-page">
+    <section class="admin-card">
+        <div>
+            <h2>Filing source folder</h2>
+            <div id="importFolder" class="code-path">Loading…</div>
+            <div id="importStats" class="muted"></div>
+        </div>
+        <div>
+            <button id="reloadFolderBtn" type="button">Reload folder</button>
+        </div>
+    </section>
+
+    <section class="admin-card assignment-controls">
+        <div class="grow">
+            <h2>Assign selected filings</h2>
+            <div id="userChoices" class="user-choice-grid"></div>
+        </div>
+        <label>
+            Batch code
+            <input id="batchCode" type="text" value="CALIBRATION_01">
+        </label>
+        <div class="button-stack">
+            <button id="addAssignmentsBtn" type="button" class="primary">Add assignments</button>
+            <button id="removeAssignmentsBtn" type="button">Remove assignments</button>
+        </div>
+    </section>
+
+    <section th:if="${isAdmin}" class="admin-card cleanup-card">
+        <div class="grow">
+            <h2>Testing cleanup</h2>
+            <p class="help">Use the same filing selections below and labeler checkboxes above. This deletes their paragraph annotations only; filings, paragraphs, users, and assignments are kept.</p>
+        </div>
+        <button id="clearLabelsBtn" type="button" class="danger-button">Clear selected labels</button>
+    </section>
+
+    <div class="toolbar-row">
+        <label><input id="selectAllFilings" type="checkbox"> Select all visible</label>
+        <label>
+            Stage
+            <select id="datasetStageFilter">
+                <option value="CALIBRATION" selected>Calibration</option>
+                <option value="BLIND_PILOT">Blind pilot</option>
+                <option value="FORMAL_VALIDATION">Formal validation</option>
+                <option value="ALL">All</option>
+            </select>
+        </label>
+        <input id="adminFilingSearch" class="search-input" type="search"
+               placeholder="Search filing…">
+        <span id="adminStatus" class="muted"></span>
+    </div>
+
+    <div class="table-wrap">
+        <table class="data-table assignment-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th class="row-number">No.</th>
+                <th>Company</th>
+                <th>Stage</th>
+                <th>FY</th>
+                <th>Paragraphs</th>
+                <th>Assigned labelers / supervisor</th>
+            </tr>
+            </thead>
+            <tbody id="adminFilingRows"></tbody>
+        </table>
+    </div>
+</main>
+
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+<script th:src="@{/js/assignments.js}"></script>
+</body>
+</html>

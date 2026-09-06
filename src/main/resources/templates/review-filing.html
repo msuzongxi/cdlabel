@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="filing_id" th:content="${filingId}">
+    <title>CGDI · Filing Comparison</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header class="topbar">
+    <div>
+        <a href="/review/paragraphs" class="back-link">← Paragraph comparison</a>
+        <strong>Filing comparison</strong>
+        <span class="muted" th:text="${username}"></span>
+    </div>
+    <div>
+        <a href="/review">Filing view</a>
+        <a href="/assignments">Assignments</a>
+        <a href="/logout">Logout</a>
+    </div>
+</header>
+
+<main class="workspace review-workspace">
+    <section class="workspace-head">
+        <div>
+            <h1 id="reviewCompany">Loading…</h1>
+            <div id="reviewFilingMeta" class="muted"></div>
+        </div>
+        <div id="reviewCounts" class="count-strip"></div>
+    </section>
+
+    <div class="review-pair-bar">
+        <strong>Compare labelers</strong>
+        <label>Labeler A
+            <select id="compareLabelerA"></select>
+        </label>
+        <span class="muted">vs</span>
+        <label>Labeler B
+            <select id="compareLabelerB"></select>
+        </label>
+        <button type="button" id="compareLabelersBtn" class="primary">Compare</button>
+        <span id="comparePairMessage" class="muted"></span>
+    </div>
+
+    <div class="review-filter-bar">
+        <label>Status
+            <select id="paragraphCompareFilter">
+                <option value="DISAGREEMENT" selected>Disagreements</option>
+                <option value="AGREEMENT">Agreements</option>
+                <option value="INCOMPLETE">Incomplete</option>
+                <option value="ALL">All paragraphs</option>
+            </select>
+        </label>
+        <input id="reviewParagraphSearch" class="search-input" type="search" placeholder="Search paragraph / text…">
+        <span id="reviewParagraphSummary" class="muted"></span>
+    </div>
+
+    <div class="review-layout">
+        <aside class="review-paragraph-pane">
+            <div id="reviewParagraphList" class="review-paragraph-list"></div>
+        </aside>
+        <section class="review-detail-pane">
+            <div id="reviewEmpty" class="empty-coding">Select a paragraph to compare.</div>
+            <div id="reviewDetail" class="hidden"></div>
+        </section>
+    </div>
+</main>
+
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+<script th:src="@{/js/review-filing.js}"></script>
+</body>
+</html>

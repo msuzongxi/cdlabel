@@ -22,6 +22,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/webjars/**", "/css/**", "/js/**").permitAll()
                 .requestMatchers("/api/admin/annotations/clear").hasRole("ADMIN")
+                .requestMatchers("/exports", "/exports/**").hasRole("ADMIN")
                 .requestMatchers("/assignments", "/api/admin/**", "/review", "/review/**", "/api/review/**")
                     .hasAnyRole("ADMIN", "SUPERVISOR")
                 .anyRequest().authenticated()

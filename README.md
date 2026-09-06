@@ -275,3 +275,13 @@ Default development users are `admin`, `johndoor`, `marykey`, `dummy`, and `dong
 ## v0.5.7 paragraph comparison queue
 
 Supervisor/admin can use `/review/paragraphs` to compare any two assigned LABELER accounts across filings, with status-first filtering for disagreements, agreements, and incomplete paragraphs. The original `/review` page remains the filing-progress view.
+
+
+## v0.5.8 admin CSV export
+
+- `/exports` is ADMIN-only.
+- Export by stage, labeler, and annotation status.
+- Default: Calibration + all labelers + Submitted only.
+- CSV is one paragraph × labeler annotation per row.
+- Includes metadata, three gates, eligibility, ontology gap, six dimension flags, all 32 attribute flags, optional attribute values, optional dimension evidence/confidence/ambiguity, notes, and submitted timestamp.
+- Supervisors and labelers cannot access `/exports` or `/exports/csv`.

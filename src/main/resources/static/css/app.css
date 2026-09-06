@@ -453,3 +453,51 @@ button:disabled { opacity: .55; cursor: default; }
     .queue-paragraph-list { max-height: 320px; }
     .queue-detail-actions .button-link { margin-left: 0; }
 }
+
+/* v0.5.8 admin CSV export */
+.export-card {
+    margin-top: 24px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    align-items: end;
+    background: #fff;
+}
+
+.export-card label {
+    display: grid;
+    gap: 7px;
+    font-weight: 650;
+}
+
+.export-card select {
+    width: 100%;
+    border: 1px solid #bbb;
+    border-radius: 7px;
+    padding: 9px 11px;
+    background: #fff;
+}
+
+.export-card button {
+    min-height: 42px;
+}
+
+.export-help {
+    margin-top: 22px;
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+}
+
+.export-help h2 {
+    margin: 0 0 8px;
+    font-size: 17px;
+}
+
+@media (max-width: 800px) {
+    .export-card {
+        grid-template-columns: 1fr;
+    }
+}

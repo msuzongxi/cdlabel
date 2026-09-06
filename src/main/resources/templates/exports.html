@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CGDI · CSV Export</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header class="topbar">
+    <div>
+        <a href="/assignments" class="back-link">← Assignments</a>
+        <strong>CSV export</strong>
+        <span class="muted" th:text="${username}"></span>
+    </div>
+    <div>
+        <a href="/review/paragraphs">Compare labels</a>
+        <a href="/assignments">Assignments</a>
+        <a href="/logout">Logout</a>
+    </div>
+</header>
+
+<main class="page">
+    <div class="page-title">
+        <h1>Export labeled data</h1>
+        <p>Admin only. One CSV row represents one paragraph × labeler annotation. The export contains gates, all six dimensions, all 32 attributes, optional values/evidence, notes, and source metadata.</p>
+    </div>
+
+    <form class="export-card" action="/exports/csv" method="get">
+        <label>
+            Stage
+            <select name="stage">
+                <option value="CALIBRATION" selected>Calibration</option>
+                <option value="BLIND_PILOT">Blind pilot</option>
+                <option value="FORMAL_VALIDATION">Formal validation</option>
+                <option value="OTHER">Other</option>
+                <option value="ALL">All stages</option>
+            </select>
+        </label>
+
+        <label>
+            Labeler
+            <select name="labelerId">
+                <option value="">All labelers</option>
+                <option th:each="labeler : ${labelers}"
+                        th:value="${labeler.id}"
+                        th:text="${labeler.username}"></option>
+            </select>
+        </label>
+
+        <label>
+            Annotation status
+            <select name="status">
+                <option value="SUBMITTED" selected>Submitted only</option>
+                <option value="MODIFIED">Modified only</option>
+                <option value="ALL">Submitted + modified</option>
+            </select>
+        </label>
+
+        <button type="submit" class="primary">Download CSV</button>
+    </form>
+
+    <section class="export-help">
+        <h2>CSV structure</h2>
+        <p class="help">Dimension and attribute columns are binary: 1 = selected/present, 0 = not selected/present. Gate columns retain YES / NO / UNCLEAR. A blank eligible value means the annotation is still an unresolved draft.</p>
+        <p class="help">The default export is Calibration + Submitted only. “All labelers” creates separate rows for each labeler's annotation; it does not merge or adjudicate their labels.</p>
+    </section>
+</main>
+</body>
+</html>

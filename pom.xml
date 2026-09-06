@@ -12,7 +12,7 @@
 
     <groupId>edu.cgdi</groupId>
     <artifactId>cgdi-labeler</artifactId>
-    <version>0.5.7-SNAPSHOT</version>
+    <version>0.5.8-SNAPSHOT</version>
     <name>cgdi-labeler</name>
     <description>CGDI human labeling system using Spring Boot, MyBatis, PostgreSQL and jQuery</description>
 

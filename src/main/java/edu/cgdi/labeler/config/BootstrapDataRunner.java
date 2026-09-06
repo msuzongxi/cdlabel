@@ -16,19 +16,19 @@ public class BootstrapDataRunner implements CommandLineRunner {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${cgdi.bootstrap.admin-password:Temp12345!}")
+    @Value("${cgdi.bootstrap.admin-password:abitsTemp12345!}")
     private String adminPassword;
 
-    @Value("${cgdi.bootstrap.labeler1-password:johndoor}")
+    @Value("${cgdi.bootstrap.labeler1-password:ybwls}")
     private String labeler1Password;
 
-    @Value("${cgdi.bootstrap.labeler2-password:marykey}")
+    @Value("${cgdi.bootstrap.labeler2-password:ysglp}")
     private String labeler2Password;
 
-    @Value("${cgdi.bootstrap.labeler3-password:dummy}")
+    @Value("${cgdi.bootstrap.labeler3-password:stcsa}")
     private String labeler3Password;
 
-    @Value("${cgdi.bootstrap.supervisor-password:donglai}")
+    @Value("${cgdi.bootstrap.supervisor-password:sfamp}")
     private String supervisorPassword;
 
     public BootstrapDataRunner(UserMapper userMapper, PasswordEncoder passwordEncoder) {

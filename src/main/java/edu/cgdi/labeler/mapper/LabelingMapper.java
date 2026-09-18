@@ -34,7 +34,7 @@ public interface LabelingMapper {
           ON an.paragraph_id = p.id
          AND an.labeler_id = u.id
         WHERE u.username = #{username}
-          AND a.assignment_type = 'LABELER'
+          AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
         GROUP BY f.id, f.company, f.fiscal_year, f.filename, f.master_cik, a.assignment_order
         ORDER BY a.assignment_order, f.fiscal_year, f.company
         """)
@@ -59,7 +59,7 @@ public interface LabelingMapper {
           ON an.paragraph_id = p.id
          AND an.labeler_id = u.id
         WHERE u.username = #{username}
-          AND a.assignment_type = 'LABELER'
+          AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
           AND f.id = #{filingId}
         GROUP BY f.id, f.company, f.fiscal_year, f.filename, f.master_cik, a.assignment_order
         """)
@@ -85,7 +85,7 @@ public interface LabelingMapper {
           ON an.paragraph_id = p.id
          AND an.labeler_id = u.id
         WHERE u.username = #{username}
-          AND a.assignment_type = 'LABELER'
+          AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
           AND a.filing_id = #{filingId}
           AND p.candidate = TRUE
           AND (
@@ -99,6 +99,63 @@ public interface LabelingMapper {
         @Param("username") String username,
         @Param("filingId") Long filingId,
         @Param("status") String status
+    );
+
+    @Select("""
+        <script>
+        SELECT
+            p.id,
+            p.filing_id,
+            p.paragraph_id,
+            p.section_hint,
+            p.heading_context,
+            p.sort_order,
+            p.word_count,
+            COALESCE(an.status, 'NEW') AS status,
+            f.company,
+            f.fiscal_year,
+            f.filename,
+            f.master_cik,
+            CASE
+                WHEN LOWER(COALESCE(f.source_path, '')) LIKE '%blind_pilot%'
+                  OR LOWER(COALESCE(f.source_path, '')) LIKE '%blind-pilot%' THEN 'BLIND_PILOT'
+                WHEN LOWER(COALESCE(f.source_path, '')) LIKE '%formal_validation%'
+                  OR LOWER(COALESCE(f.source_path, '')) LIKE '%formal-validation%' THEN 'FORMAL_VALIDATION'
+                WHEN LOWER(COALESCE(f.source_path, '')) LIKE '%calibration%' THEN 'CALIBRATION'
+                ELSE 'OTHER'
+            END AS dataset_stage
+        FROM assignment a
+        JOIN app_user u ON u.id = a.labeler_id
+        JOIN filing f ON f.id = a.filing_id
+        JOIN paragraph p ON p.filing_id = f.id
+        LEFT JOIN annotation an
+          ON an.paragraph_id = p.id
+         AND an.labeler_id = u.id
+        WHERE u.username = #{username}
+          AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
+          AND p.candidate = TRUE
+          AND (
+              (#{status} = 'NEW' AND an.id IS NULL)
+              OR
+              (#{status} &lt;&gt; 'NEW' AND an.status = #{status})
+          )
+          <if test="stage != null and stage != '' and stage != 'ALL'">
+          AND CASE
+                WHEN LOWER(COALESCE(f.source_path, '')) LIKE '%blind_pilot%'
+                  OR LOWER(COALESCE(f.source_path, '')) LIKE '%blind-pilot%' THEN 'BLIND_PILOT'
+                WHEN LOWER(COALESCE(f.source_path, '')) LIKE '%formal_validation%'
+                  OR LOWER(COALESCE(f.source_path, '')) LIKE '%formal-validation%' THEN 'FORMAL_VALIDATION'
+                WHEN LOWER(COALESCE(f.source_path, '')) LIKE '%calibration%' THEN 'CALIBRATION'
+                ELSE 'OTHER'
+              END = #{stage}
+          </if>
+        ORDER BY p.id
+        </script>
+        """)
+    List<ParagraphListItem> findParagraphQueueByStatus(
+        @Param("username") String username,
+        @Param("status") String status,
+        @Param("stage") String stage
     );
 
     @Select("""
@@ -122,7 +179,7 @@ public interface LabelingMapper {
         JOIN filing f ON f.id = a.filing_id
         JOIN paragraph p ON p.filing_id = f.id
         WHERE u.username = #{username}
-          AND a.assignment_type = 'LABELER'
+          AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
           AND f.id = #{filingId}
           AND p.id = #{paragraphDbId}
           AND p.candidate = TRUE

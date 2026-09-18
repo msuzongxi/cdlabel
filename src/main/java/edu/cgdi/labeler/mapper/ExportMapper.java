@@ -16,8 +16,7 @@ public interface ExportMapper {
         FROM app_user u
         JOIN assignment a ON a.labeler_id = u.id
         WHERE u.active = TRUE
-          AND u.role = 'LABELER'
-          AND a.assignment_type = 'LABELER'
+          AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
         ORDER BY u.id
         """)
     List<AssignableUser> findExportLabelers();
@@ -64,9 +63,8 @@ public interface ExportMapper {
         JOIN assignment a
           ON a.filing_id = f.id
          AND a.labeler_id = u.id
-         AND a.assignment_type = 'LABELER'
+         AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
         WHERE p.candidate = TRUE
-          AND u.role = 'LABELER'
           <if test="labelerId != null">
           AND u.id = #{labelerId}
           </if>
@@ -110,9 +108,8 @@ public interface ExportMapper {
         JOIN assignment a
           ON a.filing_id = f.id
          AND a.labeler_id = u.id
-         AND a.assignment_type = 'LABELER'
+         AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
         WHERE p.candidate = TRUE
-          AND u.role = 'LABELER'
           <if test="labelerId != null">
           AND u.id = #{labelerId}
           </if>
@@ -155,9 +152,8 @@ public interface ExportMapper {
         JOIN assignment a
           ON a.filing_id = f.id
          AND a.labeler_id = u.id
-         AND a.assignment_type = 'LABELER'
+         AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
         WHERE p.candidate = TRUE
-          AND u.role = 'LABELER'
           <if test="labelerId != null">
           AND u.id = #{labelerId}
           </if>

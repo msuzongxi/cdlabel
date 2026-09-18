@@ -13,6 +13,7 @@
         <span class="muted" th:text="${username}"></span>
     </div>
     <div>
+        <a href="/label/queue">Paragraph queue</a>
         <a th:if="${canAssign}" href="/assignments">Assignments</a>
         <a th:if="${canAssign}" href="/review/paragraphs">Compare labels</a>
         <a href="/logout">Logout</a>

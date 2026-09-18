@@ -53,6 +53,12 @@ public class LabelingService {
         return labelingMapper.findParagraphsByStatus(username, filingId, normalized);
     }
 
+    public List<ParagraphListItem> paragraphQueue(String username, String status, String stage) {
+        String normalizedStatus = normalizeStatus(status);
+        String normalizedStage = normalizeStage(stage);
+        return labelingMapper.findParagraphQueueByStatus(username, normalizedStatus, normalizedStage);
+    }
+
     public Map<String, Object> paragraphDetail(
         String username,
         Long filingId,
@@ -231,6 +237,19 @@ public class LabelingService {
         }
 
         return status;
+    }
+
+    private String normalizeStage(String stage) {
+        if (stage == null || stage.isBlank()) return "CALIBRATION";
+        String normalized = stage.trim().toUpperCase();
+        if (!normalized.equals("CALIBRATION")
+            && !normalized.equals("BLIND_PILOT")
+            && !normalized.equals("FORMAL_VALIDATION")
+            && !normalized.equals("OTHER")
+            && !normalized.equals("ALL")) {
+            throw new IllegalArgumentException("Unknown dataset stage: " + stage);
+        }
+        return normalized;
     }
 
     private String normalizeStatus(String status) {

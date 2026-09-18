@@ -14,13 +14,19 @@ public class PageController {
         boolean adminOrSupervisor = authentication.getAuthorities().stream().anyMatch(a ->
             a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_SUPERVISOR")
         );
-        return adminOrSupervisor ? "redirect:/assignments" : "redirect:/label";
+        return adminOrSupervisor ? "redirect:/assignments" : "redirect:/label/queue";
     }
 
     @GetMapping("/label")
     public String filings(Authentication authentication, Model model) {
         addCommon(authentication, model);
         return "filings";
+    }
+
+    @GetMapping("/label/queue")
+    public String labelQueue(Authentication authentication, Model model) {
+        addCommon(authentication, model);
+        return "label-queue";
     }
 
     @GetMapping("/label/filing/{filingId}")

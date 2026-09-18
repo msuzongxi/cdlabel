@@ -37,7 +37,7 @@ public class SecurityConfig {
                     );
 
                     if (isLabeler) {
-                        response.sendRedirect("/label");
+                        response.sendRedirect("/label/queue");
                     } else if (isAdminOrSupervisor) {
                         response.sendRedirect("/assignments");
                     } else {

@@ -47,6 +47,15 @@ public class ApiController {
         return labelingService.myFiling(authentication.getName(), filingId);
     }
 
+    @GetMapping("/my/paragraphs")
+    public Object paragraphQueue(
+        @RequestParam(defaultValue = "NEW") String status,
+        @RequestParam(defaultValue = "CALIBRATION") String stage,
+        Authentication authentication
+    ) {
+        return labelingService.paragraphQueue(authentication.getName(), status, stage);
+    }
+
     @GetMapping("/my/filings/{filingId}/paragraphs")
     public Object paragraphs(
         @PathVariable Long filingId,

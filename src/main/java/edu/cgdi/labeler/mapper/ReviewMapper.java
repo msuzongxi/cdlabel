@@ -19,9 +19,8 @@ public interface ReviewMapper {
         FROM assignment a
         JOIN app_user u ON u.id = a.labeler_id
         WHERE a.filing_id = #{filingId}
-          AND a.assignment_type = 'LABELER'
+          AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
           AND u.active = TRUE
-          AND u.role = 'LABELER'
         ORDER BY u.id
         """)
     List<AssignableUser> findAssignedLabelers(@Param("filingId") Long filingId);
@@ -45,7 +44,7 @@ public interface ReviewMapper {
                 SELECT MIN(a2.batch_code)
                 FROM assignment a2
                 WHERE a2.filing_id = f.id
-                  AND a2.assignment_type = 'LABELER'
+                  AND a2.assignment_type IN ('LABELER', 'SUPERVISOR')
             ) AS batch_code,
             (
                 SELECT COUNT(*)::INTEGER
@@ -57,7 +56,7 @@ public interface ReviewMapper {
                 SELECT COUNT(*)::INTEGER
                 FROM assignment a3
                 WHERE a3.filing_id = f.id
-                  AND a3.assignment_type = 'LABELER'
+                  AND a3.assignment_type IN ('LABELER', 'SUPERVISOR')
             ) AS labeler_count,
             (
                 SELECT COUNT(*)::INTEGER
@@ -66,7 +65,7 @@ public interface ReviewMapper {
                 JOIN assignment a4
                   ON a4.filing_id = f.id
                  AND a4.labeler_id = an.labeler_id
-                 AND a4.assignment_type = 'LABELER'
+                 AND a4.assignment_type IN ('LABELER', 'SUPERVISOR')
                 WHERE p3.filing_id = f.id
                   AND p3.candidate = TRUE
                   AND an.status = 'SUBMITTED'
@@ -76,13 +75,13 @@ public interface ReviewMapper {
                 FROM assignment a5
                 JOIN app_user u ON u.id = a5.labeler_id
                 WHERE a5.filing_id = f.id
-                  AND a5.assignment_type = 'LABELER'
+                  AND a5.assignment_type IN ('LABELER', 'SUPERVISOR')
             ) AS labelers
         FROM filing f
         WHERE EXISTS (
             SELECT 1 FROM assignment ax
             WHERE ax.filing_id = f.id
-              AND ax.assignment_type = 'LABELER'
+              AND ax.assignment_type IN ('LABELER', 'SUPERVISOR')
         )
         ORDER BY f.fiscal_year, f.company
         """)
@@ -107,7 +106,7 @@ public interface ReviewMapper {
                 SELECT MIN(a2.batch_code)
                 FROM assignment a2
                 WHERE a2.filing_id = f.id
-                  AND a2.assignment_type = 'LABELER'
+                  AND a2.assignment_type IN ('LABELER', 'SUPERVISOR')
             ) AS batch_code,
             (
                 SELECT COUNT(*)::INTEGER FROM paragraph p2
@@ -115,7 +114,7 @@ public interface ReviewMapper {
             ) AS total_count,
             (
                 SELECT COUNT(*)::INTEGER FROM assignment a3
-                WHERE a3.filing_id = f.id AND a3.assignment_type = 'LABELER'
+                WHERE a3.filing_id = f.id AND a3.assignment_type IN ('LABELER', 'SUPERVISOR')
             ) AS labeler_count,
             (
                 SELECT COUNT(*)::INTEGER
@@ -124,7 +123,7 @@ public interface ReviewMapper {
                 JOIN assignment a4
                   ON a4.filing_id = f.id
                  AND a4.labeler_id = an.labeler_id
-                 AND a4.assignment_type = 'LABELER'
+                 AND a4.assignment_type IN ('LABELER', 'SUPERVISOR')
                 WHERE p3.filing_id = f.id
                   AND p3.candidate = TRUE
                   AND an.status = 'SUBMITTED'
@@ -134,7 +133,7 @@ public interface ReviewMapper {
                 FROM assignment a5
                 JOIN app_user u ON u.id = a5.labeler_id
                 WHERE a5.filing_id = f.id
-                  AND a5.assignment_type = 'LABELER'
+                  AND a5.assignment_type IN ('LABELER', 'SUPERVISOR')
             ) AS labelers
         FROM filing f
         WHERE f.id = #{filingId}
@@ -174,7 +173,7 @@ public interface ReviewMapper {
         FROM paragraph p
         JOIN assignment a
           ON a.filing_id = p.filing_id
-         AND a.assignment_type = 'LABELER'
+         AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
         JOIN app_user u ON u.id = a.labeler_id
         LEFT JOIN annotation an
           ON an.paragraph_id = p.id
@@ -211,8 +210,7 @@ public interface ReviewMapper {
         FROM app_user u
         JOIN assignment a ON a.labeler_id = u.id
         WHERE u.active = TRUE
-          AND u.role = 'LABELER'
-          AND a.assignment_type = 'LABELER'
+          AND a.assignment_type IN ('LABELER', 'SUPERVISOR')
         ORDER BY u.id
         """)
     List<AssignableUser> findComparisonLabelers();
@@ -237,7 +235,7 @@ public interface ReviewMapper {
                 SELECT MIN(ax.batch_code)
                 FROM assignment ax
                 WHERE ax.filing_id = f.id
-                  AND ax.assignment_type = 'LABELER'
+                  AND ax.assignment_type IN ('LABELER', 'SUPERVISOR')
             ) AS batch_code,
             p.id AS paragraph_db_id,
             p.paragraph_id,
@@ -252,13 +250,13 @@ public interface ReviewMapper {
               SELECT 1 FROM assignment aa
               WHERE aa.filing_id = f.id
                 AND aa.labeler_id = #{labelerA}
-                AND aa.assignment_type = 'LABELER'
+                AND aa.assignment_type IN ('LABELER', 'SUPERVISOR')
           )
           AND EXISTS (
               SELECT 1 FROM assignment ab
               WHERE ab.filing_id = f.id
                 AND ab.labeler_id = #{labelerB}
-                AND ab.assignment_type = 'LABELER'
+                AND ab.assignment_type IN ('LABELER', 'SUPERVISOR')
           )
           <if test="stage != null and stage != '' and stage != 'ALL'">
           AND CASE
@@ -301,7 +299,7 @@ public interface ReviewMapper {
         JOIN assignment au
           ON au.filing_id = f.id
          AND au.labeler_id = u.id
-         AND au.assignment_type = 'LABELER'
+         AND au.assignment_type IN ('LABELER', 'SUPERVISOR')
         LEFT JOIN annotation an
           ON an.paragraph_id = p.id
          AND an.labeler_id = u.id
@@ -310,13 +308,13 @@ public interface ReviewMapper {
               SELECT 1 FROM assignment aa
               WHERE aa.filing_id = f.id
                 AND aa.labeler_id = #{labelerA}
-                AND aa.assignment_type = 'LABELER'
+                AND aa.assignment_type IN ('LABELER', 'SUPERVISOR')
           )
           AND EXISTS (
               SELECT 1 FROM assignment ab
               WHERE ab.filing_id = f.id
                 AND ab.labeler_id = #{labelerB}
-                AND ab.assignment_type = 'LABELER'
+                AND ab.assignment_type IN ('LABELER', 'SUPERVISOR')
           )
           <if test="stage != null and stage != '' and stage != 'ALL'">
           AND CASE
@@ -350,13 +348,13 @@ public interface ReviewMapper {
               SELECT 1 FROM assignment aa
               WHERE aa.filing_id = f.id
                 AND aa.labeler_id = #{labelerA}
-                AND aa.assignment_type = 'LABELER'
+                AND aa.assignment_type IN ('LABELER', 'SUPERVISOR')
           )
           AND EXISTS (
               SELECT 1 FROM assignment ab
               WHERE ab.filing_id = f.id
                 AND ab.labeler_id = #{labelerB}
-                AND ab.assignment_type = 'LABELER'
+                AND ab.assignment_type IN ('LABELER', 'SUPERVISOR')
           )
           <if test="stage != null and stage != '' and stage != 'ALL'">
           AND CASE
@@ -392,13 +390,13 @@ public interface ReviewMapper {
               SELECT 1 FROM assignment aaa
               WHERE aaa.filing_id = f.id
                 AND aaa.labeler_id = #{labelerA}
-                AND aaa.assignment_type = 'LABELER'
+                AND aaa.assignment_type IN ('LABELER', 'SUPERVISOR')
           )
           AND EXISTS (
               SELECT 1 FROM assignment aab
               WHERE aab.filing_id = f.id
                 AND aab.labeler_id = #{labelerB}
-                AND aab.assignment_type = 'LABELER'
+                AND aab.assignment_type IN ('LABELER', 'SUPERVISOR')
           )
           <if test="stage != null and stage != '' and stage != 'ALL'">
           AND CASE

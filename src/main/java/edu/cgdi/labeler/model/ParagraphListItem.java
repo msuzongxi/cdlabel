@@ -9,6 +9,11 @@ public class ParagraphListItem {
     private Integer sortOrder;
     private Integer wordCount;
     private String status;
+    private String company;
+    private Integer fiscalYear;
+    private String filename;
+    private String masterCik;
+    private String datasetStage;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -26,4 +31,14 @@ public class ParagraphListItem {
     public void setWordCount(Integer wordCount) { this.wordCount = wordCount; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    public String getCompany() { return company; }
+    public void setCompany(String company) { this.company = company; }
+    public Integer getFiscalYear() { return fiscalYear; }
+    public void setFiscalYear(Integer fiscalYear) { this.fiscalYear = fiscalYear; }
+    public String getFilename() { return filename; }
+    public void setFilename(String filename) { this.filename = filename; }
+    public String getMasterCik() { return masterCik; }
+    public void setMasterCik(String masterCik) { this.masterCik = masterCik; }
+    public String getDatasetStage() { return datasetStage; }
+    public void setDatasetStage(String datasetStage) { this.datasetStage = datasetStage; }
 }
